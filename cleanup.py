@@ -54,10 +54,7 @@ class User(models.User):
         """Takes any kwarg compatible with Python's `timedelta` and says
         whether the user's last tweet is older than the `timedelta` defined by
         these kwargs"""
-        try:
-            if not self.status:
-                return False
-        except AttributeError:
+        if not getattr(self, "status", None):
             return False
 
         return self.status.created_at < datetime.now() - timedelta(**kwargs)
