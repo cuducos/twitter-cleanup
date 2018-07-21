@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 import arrow
-from botometer import Botometer
+from botometer import Botometer, NoTimelineError
 from decouple import config
 from tweepy import API, Cursor, OAuthHandler, models
 
@@ -64,9 +64,12 @@ class User(models.User):
         if self._botometer_result:
             return self._botometer_result
 
-        result = self.botometer.check_account(self.id)
-        self._botometer_result = result.get("cap", {}).get("universal")
-        return self.botometer_result
+        try:
+            result = self.botometer.check_account(self.id)
+            self._botometer_result = result.get("cap", {}).get("universal")
+            return self.botometer_result
+        except NoTimelineError as e:
+            print(e)
 
     def is_bot(self, threshold=0.75):
         if self.protected or not self.botometer_result:
