@@ -5,6 +5,10 @@ Tiny script to clean-up your Twitter account:
 * Removing users that have been tweeting for a while
 * Soft-blocking bots (blocks and immediately unblocks the account, so it stops following you)
 
+## Translated docs
+
+[PT-BR](./l10n/pt-br.md)
+
 ## Requirements
 
 * Python 3.6
