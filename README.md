@@ -1,13 +1,11 @@
 # Twitter Clean-up
 
+> [🇧🇷 Versão em português do Brasil](docs/README.pt-BR.md)
+
 Tiny script to clean-up your Twitter account:
 
-* Removing users that have been tweeting for a while
+* Removing users that have not been tweeting for a while
 * Soft-blocking bots (blocks and immediately unblocks the account, so it stops following you)
-
-## Translated docs
-
-[PT-BR](./l10n/pt-br.md)
 
 ## Requirements
 
@@ -34,7 +32,6 @@ For example, to unfollow users inactive for the last 30 days:
 ```python
 >>> cleanup.unfollow_inactive_for(days=30)
 ```
-
 
 ### Soft-blocking bots
 

@@ -1,5 +1,7 @@
 # Twitter Clean-up
 
+> [🇬🇧 English version](../README.md)
+
 Um pequeno script para limpar seu perfil no Twitter:
 
 * removendo usuários que não tweetam há algum tempo
