@@ -66,10 +66,11 @@ class User(models.User):
 
         try:
             result = self.botometer.check_account(self.id)
-            self._botometer_result = result.get("cap", {}).get("universal")
-            return self.botometer_result
-        except NoTimelineError as e:
-            print(e)
+        except NoTimelineError:
+            return None
+
+        self._botometer_result = result.get("cap", {}).get("universal")
+        return self.botometer_result
 
     def is_bot(self, threshold=0.75):
         if self.protected or not self.botometer_result:
