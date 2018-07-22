@@ -19,37 +19,7 @@ Inside a Python _virtualenv_:
 
 1. Copy `.env.sample` as `.env` and insert your credentials accordingly
 1. Install the dependencies with `pip install -r requirements.txt`
-1. Start the interactive console with `python -i cleanup.py`
-
-### Removing idle accounts
-
-Call the method `cleanup.unfollow_inactive_for(**kwargs)`.
-
-> It accepts any keyword argument compatible with Python's [`timedelta`](https://docs.python.org/3.6/library/datetime.html#timedelta-objects). **It will prompt you before unfollowing anyone**.
-
-For example, to unfollow users inactive for the last 30 days:
-
-```python
->>> cleanup.unfollow_inactive_for(days=30)
-```
-
-### Soft-blocking bots
-
-Call the function `soft_block_bots(threshold=None)`.
-
-> The `threshold` value is a `float` between `0` and `1`. Every public account is analyzed using [Botometer](https://botometer.iuni.iu.edu/#!/) and all acounts with a higher probability than the `threshold` would be considered a bot.  **It will prompt you before soft-blocking anyone**.
-
-For example, to run with the default threshold (`0.75`):
-
-```python
->>> cleanup.soft_block_bots()
-```
-
-Or to run with a custom threshold:
-
-```python
->>> cleanup.soft_block_bots(threshold=0.68)
-```
+1. Run the CLI with `python -m twitter_cleanup` and follow the instructions
 
 ## Contributing
 
