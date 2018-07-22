@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from enum import Flag
 
 import arrow
 from botometer import Botometer, NoTimelineError
@@ -35,15 +36,50 @@ class Authentication:
         )
 
 
+BotometerStatus = Flag('BotometerStatus', 'PENDING READY UNAVAILABLE')
+
+
+class BotometerResult:
+    """Holds Botometer result and avoids repeating the request to their API"""
+
+    def __init__(self):
+        authentication = Authentication().botometer
+        self.botometer = Botometer(wait_on_ratelimit=True, **authentication)
+        self.status = BotometerStatus.PENDING
+        self._probability = None
+        self.user_id = None
+
+    def _get_result(self):
+        try:
+            result = self.botometer.check_account(self.user_id)
+        except NoTimelineError:
+            self.status = BotometerStatus.UNAVAILABLE
+        else:
+            self._probability = result.get("cap", {}).get("universal")
+            self.status = BotometerStatus.READY
+
+    @property
+    def probability(self):
+        if not self.user_id:
+            raise RuntimeError('Cannot use Botometer without an account ID')
+
+        if self.status is BotometerStatus.PENDING:
+            self._get_result()
+            return self.probability
+
+        if self.status is BotometerStatus.UNAVAILABLE:
+            return 0.0  # let's assume it's not a bot
+
+        return self._probability
+
+
 class User(models.User):
     """A wrapper for Tweepy native User model, including custom methods to
     check idle accounts and bots"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        authentication = Authentication()
-        self.botometer = Botometer(wait_on_ratelimit=True, **authentication.botometer)
-        self._botometer_result = None
+        self.botometer_result = BotometerResult()
 
     @classmethod
     def parse(cls, api, data):
@@ -59,24 +95,12 @@ class User(models.User):
 
         return self.status.created_at < datetime.now() - timedelta(**kwargs)
 
-    @property
-    def botometer_result(self):
-        if self._botometer_result:
-            return self._botometer_result
-
-        try:
-            result = self.botometer.check_account(self.id)
-        except NoTimelineError:
-            return None
-
-        self._botometer_result = result.get("cap", {}).get("universal")
-        return self.botometer_result
-
     def is_bot(self, threshold=0.75):
-        if self.protected or not self.botometer_result:
+        if self.protected:
             return False
 
-        return self.botometer_result > threshold
+        self.botometer_result.user_id = self.id
+        return self.botometer_result.probability > threshold
 
 
 class Cleanup:
@@ -137,9 +161,10 @@ class Cleanup:
 
     def soft_block_bot(self, user):
         """Confirms and soft-block a given account"""
+        percent = 100 * user.botometer_result.probability
         message = (
             f"Confirm soft-block {user.screen_name}?\n"
-            f"{100 * user.botometer_result:.2f}% probability of being a bot"
+            f"{percent:.2f}% probability of being a bot"
         )
         if not self.confirm(message):
             return
