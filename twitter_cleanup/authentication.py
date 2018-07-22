@@ -6,11 +6,11 @@ class Authentication:
     """Holds authentication data for further usage in the script"""
 
     def __init__(self):
-        self.consumer_key = config("CONSUMER_KEY")
-        self.consumer_secret = config("CONSUMER_SECRET")
-        self.access_token = config("ACCESS_TOKEN_KEY")
-        self.access_token_secret = config("ACCESS_TOKEN_SECRET")
-        self.mashape_key = config("MASHAPE_KEY", default=None)
+        self.consumer_key = config("TWITTER_CONSUMER_KEY")
+        self.consumer_secret = config("TWITTER_CONSUMER_SECRET")
+        self.access_token = config("TWITTER_ACCESS_TOKEN_KEY")
+        self.access_token_secret = config("TWITTER_ACCESS_TOKEN_SECRET")
+        self.mashape_key = config("BOTOMETER_MASHAPE_KEY", default=None)
 
     @property
     def tweepy(self):
