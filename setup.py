@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 with open("README.rst") as fobj:
@@ -24,12 +24,13 @@ setup(
         "python-decouple>=3.1",
         "tweepy>=3.6.0",
     ],
-    keywords="gist, command-line, github, dotfiles",
+    keywords="twitter, bots, social network",
     license="GPLv3",
     long_description=long_description,
     name="twitter-cleanup",
+    packages=find_packages(),
     py_modules=["twitter_cleanup"],
     url="https://github.com/cuducos/twitter-cleanup",
-    version="0.0.1",
+    version="0.0.2",
     zip_safe=False,
 )

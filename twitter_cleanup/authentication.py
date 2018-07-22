@@ -1,4 +1,6 @@
-from decouple import config
+from os import getcwd
+
+from decouple import AutoConfig
 from tweepy import OAuthHandler
 
 
@@ -6,6 +8,7 @@ class Authentication:
     """Holds authentication data for further usage in the script"""
 
     def __init__(self):
+        config = AutoConfig(getcwd())
         self.consumer_key = config("TWITTER_CONSUMER_KEY")
         self.consumer_secret = config("TWITTER_CONSUMER_SECRET")
         self.access_token = config("TWITTER_ACCESS_TOKEN_KEY")

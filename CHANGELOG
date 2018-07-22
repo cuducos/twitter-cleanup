@@ -1,0 +1,4 @@
+# Changelog
+
+**0.0.2** (July 22, 2018)
+  * Fix bugs when running the package outside of the package directory
