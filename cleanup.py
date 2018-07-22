@@ -36,7 +36,7 @@ class Authentication:
         )
 
 
-BotometerStatus = Flag('BotometerStatus', 'PENDING READY UNAVAILABLE')
+BotometerStatus = Flag("BotometerStatus", "PENDING READY UNAVAILABLE")
 
 
 class BotometerResult:
@@ -61,7 +61,7 @@ class BotometerResult:
     @property
     def probability(self):
         if not self.user_id:
-            raise RuntimeError('Cannot use Botometer without an account ID')
+            raise RuntimeError("Cannot use Botometer without an account ID")
 
         if self.status is BotometerStatus.PENDING:
             self._get_result()
@@ -109,7 +109,7 @@ class Cleanup:
 
     def __init__(self):
         self.authentication = Authentication()
-        self.api = API(self.authentication.tweepy)
+        self.api = API(self.authentication.tweepy, wait_on_rate_limit=True)
         self.me = self.api.me()
 
     @property
