@@ -1,7 +1,7 @@
 Twitter Clean-up
 ================
 
-    `🇬🇧 English version <../README.md>`_
+    `🇬🇧 English version <../README.rst>`_
 
 Um pequeno script para limpar seu perfil no Twitter:
 

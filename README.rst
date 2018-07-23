@@ -1,7 +1,7 @@
 Twitter Clean-up
 ================
 
-    `🇧🇷 Versão em português do Brasil <docs/README.pt-BR.md>`_
+    `🇧🇷 Versão em português do Brasil <docs/README.pt-BR.rst>`_
 
 Tiny script to clean-up your Twitter account:
 
@@ -48,4 +48,4 @@ Or soft-block every bot with:
 Contributing
 ------------
 
-Please, format your code with `Black <https://github.com/ambv/black)>`_.
+Please, format your code with `Black <https://github.com/ambv/black>`_.
