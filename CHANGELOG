@@ -1,4 +1,14 @@
 # Changelog
 
+**0.0.3** (February 5, 2019)
+  * First scan all users (in both commands inactive/bots) and then start to
+  unfollow/block (prompt included). This allows the process to run the time
+  consuming tasks without requiring human interaction.
+  * Add cache, so if the script stops for wahtever reason, users can continue
+  the execution from the point it stopped last time, without depending on
+  repeated external requests
+  * Enhance user feedback using Click's progress bar
+  * Update third-party dependencies
+
 **0.0.2** (July 22, 2018)
   * Fix bugs when running the package outside of the package directory
