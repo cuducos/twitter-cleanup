@@ -3,6 +3,7 @@ import click
 from tweepy import API, Cursor
 
 from twitter_cleanup.authentication import authentication
+from twitter_cleanup.cache import Cache
 from twitter_cleanup.user import User
 
 
@@ -33,9 +34,19 @@ class TwitterCleanup:
         kwargs"""
         total, count = self.me.friends_count, 0
         to_unfollow = []
+        cache = Cache("unfollow_inactive_for", kwargs)
+
         for user in self.following:
-            if user.last_status_before(**kwargs):
+            cached = cache.get(user.screen_name)
+            if isinstance(cached, bool):
+                should_unfollow = cached
+            else:
+                should_unfollow = user.last_status_before(**kwargs)
+                cache.set(user.screen_name, should_unfollow)
+
+            if should_unfollow:
                 to_unfollow.append(user)
+
             count += 1
             self.percent(count, total)
 
@@ -61,9 +72,19 @@ class TwitterCleanup:
         `threshold` (defaults to 0.75 in User class)."""
         total, count = self.me.followers_count, 0
         to_block = []
+        cache = Cache("soft_block_bots", threshold)
+
         for user in self.followers:
-            if user.is_bot():
+            cached = cache.get(user.screen_name)
+            if isinstance(cached, bool):
+                should_soft_block = cached
+            else:
+                should_soft_block = user.is_bot()
+                cache.set(user.screen_name, should_soft_block)
+
+            if should_soft_block:
                 to_block.append(user)
+
             count += 1
             self.percent(count, total)
 

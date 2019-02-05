@@ -1,3 +1,6 @@
+import os.path
+from pathlib import Path
+
 import click
 from twitter_cleanup import TwitterCleanup
 
@@ -30,6 +33,15 @@ def inactive(context, days):
 def bots(context, threshold):
     """Soft-block bots following you."""
     context.obj["cleanup"].soft_block_bots(threshold=threshold / 100)
+
+
+@cli.command()
+@click.pass_context
+def clear_cache(context):
+    """Clear cache files."""
+    for file in Path(os.path.expanduser("~")).glob(".twitter-cleanup.cache.*"):
+        click.echo(f"Deleting {file}")
+        file.unlink()
 
 
 if __name__ == "__main__":
