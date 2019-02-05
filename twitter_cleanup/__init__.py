@@ -32,11 +32,15 @@ class TwitterCleanup:
         users whose last tweet are older than the `timedelta` defined by these
         kwargs"""
         total, count = self.me.friends_count, 0
+        to_unfollow = []
         for user in self.following:
             if user.last_status_before(**kwargs):
-                self.unfollow(user)
+                to_unfollow.append(user)
             count += 1
             self.percent(count, total)
+
+        for user in to_unfollow:
+            self.unfollow(user)
 
     def unfollow(self, user):
         """Confirms and unfollow a given user"""
@@ -56,11 +60,15 @@ class TwitterCleanup:
         """Soft-blocks every bot account classified by Botometer lower than the
         `threshold` (defaults to 0.75 in User class)."""
         total, count = self.me.followers_count, 0
+        to_block = []
         for user in self.followers:
             if user.is_bot():
-                self.soft_block_bot(user)
+                to_block.append(user)
             count += 1
             self.percent(count, total)
+
+        for user in to_block:
+            self.soft_block_bot(user)
 
     def soft_block_bot(self, user):
         """Confirms and soft-block a given account"""
