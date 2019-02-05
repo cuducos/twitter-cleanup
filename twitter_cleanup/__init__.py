@@ -32,23 +32,26 @@ class TwitterCleanup:
         """Takes any kwarg compatible with Python's `timedelta` and unfollows
         users whose last tweet are older than the `timedelta` defined by these
         kwargs"""
-        total, count = self.me.friends_count, 0
+        total = self.me.friends_count
         to_unfollow = []
         cache = Cache("unfollow_inactive_for", kwargs)
 
-        for user in self.following:
-            cached = cache.get(user.screen_name)
-            if isinstance(cached, bool):
-                should_unfollow = cached
-            else:
-                should_unfollow = user.last_status_before(**kwargs)
-                cache.set(user.screen_name, should_unfollow)
+        bar_kwargs = dict(
+            length=total,
+            label=f"Looking for inactive users in {total} accounts",
+            width=0,  # 0 means full-width
+        )
+        with click.progressbar(**bar_kwargs) as bar:
+            for user in self.following:
+                should_unfollow = cache.get(user.screen_name)
+                if isinstance(should_unfollow, bool):
+                    should_unfollow = user.last_status_before(**kwargs)
+                    cache.set(user.screen_name, should_unfollow)
 
-            if should_unfollow:
-                to_unfollow.append(user)
+                if should_unfollow:
+                    to_unfollow.append(user)
 
-            count += 1
-            self.percent(count, total)
+                bar.update(1)
 
         for user in to_unfollow:
             self.unfollow(user)
@@ -70,23 +73,26 @@ class TwitterCleanup:
     def soft_block_bots(self, threshold=None):
         """Soft-blocks every bot account classified by Botometer lower than the
         `threshold` (defaults to 0.75 in User class)."""
-        total, count = self.me.followers_count, 0
+        total = self.me.followers_count
         to_block = []
         cache = Cache("soft_block_bots", threshold)
 
-        for user in self.followers:
-            cached = cache.get(user.screen_name)
-            if isinstance(cached, bool):
-                should_soft_block = cached
-            else:
-                should_soft_block = user.is_bot()
-                cache.set(user.screen_name, should_soft_block)
+        bar_kwargs = dict(
+            length=total,
+            label=f"Looking for bots in {total} accounts",
+            width=0,  # 0 means full-width
+        )
+        with click.progressbar(**bar_kwargs) as bar:
+            for user in self.followers:
+                should_soft_block = cache.get(user.screen_name)
+                if isinstance(should_soft_block, bool):
+                    should_soft_block = user.is_bot()
+                    cache.set(user.screen_name, should_soft_block)
 
-            if should_soft_block:
-                to_block.append(user)
+                if should_soft_block:
+                    to_block.append(user)
 
-            count += 1
-            self.percent(count, total)
+                bar.update(1)
 
         for user in to_block:
             self.soft_block_bot(user)
@@ -110,9 +116,3 @@ class TwitterCleanup:
             return True
 
         return click.confirm(message)
-
-    @staticmethod
-    def percent(count, total):
-        percent = (count * 100) / total
-        message = f"[{percent:.2f}%] {count} out of {total} accounts"
-        print(message, end="\r")
