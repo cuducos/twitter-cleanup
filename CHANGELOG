@@ -1,5 +1,8 @@
 # Changelog
 
+**0.0.4** (February 6, 2019)
+  * Fix typo in setup.py (thanks @jcssilva)
+
 **0.0.3** (February 5, 2019)
   * First scan all users (in both commands inactive/bots) and then start to
   unfollow/block (prompt included). This allows the process to run the time
