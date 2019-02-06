@@ -15,7 +15,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Topic :: Utilities",
     ],
-    description="Clean-up iactive accounts and bots from your Twitter",
+    description="Clean-up inactive accounts and bots from your Twitter",
     entry_points="[console_scripts]\ntwitter-cleanup=twitter_cleanup.__main__:cli",
     install_requires=[
         "arrow>=0.13.0",
