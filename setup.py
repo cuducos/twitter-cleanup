@@ -31,6 +31,6 @@ setup(
     packages=find_packages(),
     py_modules=["twitter_cleanup"],
     url="https://github.com/cuducos/twitter-cleanup",
-    version="0.0.4",
+    version="0.0.5",
     zip_safe=False,
 )

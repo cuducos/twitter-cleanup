@@ -1,5 +1,9 @@
 # Changelog
 
+**0.0.5** (April 22, 2019)
+  * Fix bug in using cached values
+  * Minor refactors to make the source clearer
+
 **0.0.4** (February 6, 2019)
   * Fix typo in setup.py (thanks @jcssilva)
 
