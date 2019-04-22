@@ -44,7 +44,8 @@ class TwitterCleanup:
         with click.progressbar(**bar_kwargs) as bar:
             for user in self.following:
                 should_unfollow = cache.get(user.screen_name)
-                if isinstance(should_unfollow, bool):
+
+                if should_unfollow is None:  # nothing cached
                     should_unfollow = user.last_status_before(**kwargs)
                     cache.set(user.screen_name, should_unfollow)
 
@@ -85,7 +86,8 @@ class TwitterCleanup:
         with click.progressbar(**bar_kwargs) as bar:
             for user in self.followers:
                 should_soft_block = cache.get(user.screen_name)
-                if isinstance(should_soft_block, bool):
+
+                if should_soft_block is None:  # nothing cached
                     should_soft_block = user.is_bot()
                     cache.set(user.screen_name, should_soft_block)
 
