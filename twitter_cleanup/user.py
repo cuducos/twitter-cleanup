@@ -31,5 +31,5 @@ class User(models.User):
         if self.protected:
             return False
 
-        self.botometer_result.user_id = self.id
+        self.botometer_result.set_user(self.id)
         return self.botometer_result.probability > threshold
