@@ -8,6 +8,10 @@ from twitter_cleanup.authentication import authentication
 BotometerStatus = Flag("BotometerStatus", "PENDING READY UNAVAILABLE")
 
 
+class BotometerResultError(Exception):
+    pass
+
+
 class BotometerResult:
     """Holds Botometer result and avoids repeating the request to their API"""
 
@@ -35,7 +39,7 @@ class BotometerResult:
     @property
     def probability(self):
         if not self.user_id:
-            raise RuntimeError("Cannot use Botometer without an account ID")
+            raise BotometerResultError("Cannot use Botometer without account ID")
 
         if self.status is BotometerStatus.PENDING:
             self._get_result()
