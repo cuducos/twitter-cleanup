@@ -19,6 +19,7 @@ setup(
     entry_points="[console_scripts]\ntwitter-cleanup=twitter_cleanup.__main__:cli",
     install_requires=[
         "arrow>=0.13.0",
+        "backoff>=1.9.0",
         "click>=7.0",
         "botometer>=1.3",
         "python-decouple>=3.1",

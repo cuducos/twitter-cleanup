@@ -1,5 +1,7 @@
 from enum import Flag
 
+import backoff
+import requests
 from botometer import Botometer, NoTimelineError
 
 from twitter_cleanup.authentication import authentication
@@ -27,6 +29,11 @@ class BotometerResult:
     def set_user(self, user_id):
         self.user_id = user_id
 
+    @backoff.on_exception(
+            backoff.expo, 
+            requests.exceptions.RequestException, 
+            max_tries=10, 
+            giveup=lambda e: 400 <= e.response.status_code < 500) # give up on fatal error
     def _get_result(self):
         try:
             result = self.botometer.check_account(self.user_id)
