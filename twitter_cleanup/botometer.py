@@ -2,6 +2,7 @@ from enum import Flag
 
 import backoff
 import requests
+from tweepy.error import RateLimitError
 from botometer import Botometer, NoTimelineError
 
 from twitter_cleanup.authentication import authentication
@@ -35,6 +36,7 @@ class BotometerResult:
         max_tries=10,
         giveup=lambda e: 400 <= e.response.status_code < 500,  # give up on fatal error
     )
+    @backoff.on_exception(backoff.expo, RateLimitError)
     def _get_result(self):
         try:
             result = self.botometer.check_account(self.user_id)
