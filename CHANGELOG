@@ -1,5 +1,10 @@
 # Changelog
 
+**0.0.6** (November 22, 2019)
+  * Make CLI persistent: it now  retries failed HTTP requests (thanks @g4brielvs)
+  * Enhance the CLI output (progress bar and confirmation messages)
+  * Add support for Python 3.7 and 3.8
+
 **0.0.5** (April 22, 2019)
   * Fix bug in using cached values
   * Minor refactors to make the source clearer
