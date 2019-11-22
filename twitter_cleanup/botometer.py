@@ -1,7 +1,7 @@
 from enum import Flag
 
 import backoff
-import requests
+from requests.exceptions import RequestException
 from tweepy.error import RateLimitError
 from botometer import Botometer, NoTimelineError
 
@@ -30,13 +30,8 @@ class BotometerResult:
     def set_user(self, user_id):
         self.user_id = user_id
 
-    @backoff.on_exception(
-        backoff.expo,
-        requests.exceptions.RequestException,
-        max_tries=10,
-        giveup=lambda e: 400 <= e.response.status_code < 500,  # give up on fatal error
-    )
     @backoff.on_exception(backoff.expo, RateLimitError)
+    @backoff.on_exception(backoff.expo, RequestException, max_tries=10)
     def _get_result(self):
         try:
             result = self.botometer.check_account(self.user_id)
