@@ -15,6 +15,27 @@ class TwitterCleanup:
         self.api = API(authentication.tweepy, wait_on_rate_limit=True)
         self.me = self.api.me()
         self.assume_yes = assume_yes
+        self._progress_bar_kwargs = {
+            "show_percent": True,
+            "show_pos": True,
+            "width": 0,  # 0 means full-width
+        }
+
+    def progress_bar_kwargs(self, obj, total):
+        kwargs = {"length": total, "label": f"Looking for {obj} in {total:,} accounts"}
+        kwargs.update(self._progress_bar_kwargs)
+        return kwargs
+
+    def action_message(self, obj, user):
+        last_tweet_date = arrow.get(user.status.created_at)
+        message = (
+            f"",
+            f"==> Confirm {obj} {user.screen_name}?",
+            f"    https://twitter.com/{user.screen_name}?",
+            f"",
+            f"    Last tweet was {last_tweet_date.humanize()}:\n    {user.status.text}\n",
+        )
+        return "\n".join(message)
 
     @property
     def following(self):
@@ -36,12 +57,8 @@ class TwitterCleanup:
         to_unfollow = []
         cache = Cache("unfollow_inactive_for", kwargs)
 
-        bar_kwargs = dict(
-            length=total,
-            label=f"Looking for inactive users in {total} accounts",
-            width=0,  # 0 means full-width
-        )
-        with click.progressbar(**bar_kwargs) as bar:
+        kwargs = self.progress_bar_kwargs("inactivity", total)
+        with click.progressbar(**kwargs) as bar:
             for user in self.following:
                 should_unfollow = cache.get(user.screen_name)
 
@@ -59,13 +76,7 @@ class TwitterCleanup:
 
     def unfollow(self, user):
         """Confirms and unfollow a given user"""
-        last_tweet_date = arrow.get(user.status.created_at)
-        message = (
-            f"Confirm unfollow {user.screen_name}?\n\n"
-            f"Last tweet was {last_tweet_date.humanize()}:\n\n"
-            f"{user.status.text}\n\n"
-        )
-        if not self.confirm(message):
+        if not self.confirm(self.action_message("unfollow", user)):
             return
 
         self.api.destroy_friendship(user.id)
@@ -78,12 +89,8 @@ class TwitterCleanup:
         to_block = []
         cache = Cache("soft_block_bots", threshold)
 
-        bar_kwargs = dict(
-            length=total,
-            label=f"Looking for bots in {total} accounts",
-            width=0,  # 0 means full-width
-        )
-        with click.progressbar(**bar_kwargs) as bar:
+        kwargs = self.progress_bar_kwargs("bots", total)
+        with click.progressbar(**kwargs) as bar:
             for user in self.followers:
                 should_soft_block = cache.get(user.screen_name)
 
@@ -102,11 +109,7 @@ class TwitterCleanup:
     def soft_block_bot(self, user):
         """Confirms and soft-block a given account"""
         percent = 100 * user.botometer_result.probability
-        message = (
-            f"Confirm soft-block {user.screen_name}?\n"
-            f"{percent:.2f}% probability of being a bot"
-        )
-        if not self.confirm(message):
+        if not self.confirm(self.action_message("soft-block", user)):
             return
 
         self.api.create_block(user.id)
