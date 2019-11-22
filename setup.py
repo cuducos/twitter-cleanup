@@ -1,8 +1,5 @@
+from pathlib import Path
 from setuptools import find_packages, setup
-
-
-with open("README.rst") as fobj:
-    long_description = fobj.read()
 
 
 setup(
@@ -29,7 +26,8 @@ setup(
     ],
     keywords="twitter, bots, social network",
     license="GPLv3",
-    long_description=long_description,
+    long_description=Path("README.md").read_text(),
+    long_description_content_type="text/markdown",
     name="twitter-cleanup",
     packages=find_packages(),
     py_modules=["twitter_cleanup"],
