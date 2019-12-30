@@ -7,6 +7,15 @@ from tweepy import OAuthHandler
 class Authentication:
     """Holds authentication data for further usage in the script"""
 
+    __instance = None
+
+    @staticmethod
+    def getInstance():
+        """ Static access method. """
+        if Authentication.__instance == None:
+            Authentication()
+        return Authentication.__instance
+
     def __init__(self):
         config = AutoConfig(getcwd())
         self.consumer_key = config("TWITTER_CONSUMER_KEY")
@@ -32,6 +41,3 @@ class Authentication:
             access_token_secret=self.access_token_secret,
             mashape_key=self.mashape_key,
         )
-
-
-authentication = Authentication()

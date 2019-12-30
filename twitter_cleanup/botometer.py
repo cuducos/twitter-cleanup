@@ -5,7 +5,7 @@ from requests.exceptions import RequestException
 from tweepy.error import RateLimitError
 from botometer import Botometer, NoTimelineError
 
-from twitter_cleanup.authentication import authentication
+from twitter_cleanup.authentication import Authentication
 
 
 BotometerStatus = Flag("BotometerStatus", "PENDING READY UNAVAILABLE")
@@ -19,7 +19,8 @@ class BotometerResult:
     """Holds Botometer result and avoids repeating the request to their API"""
 
     def __init__(self, user_id=None):
-        kwargs = authentication.botometer.copy()
+        auth = Authentication.getInstance()
+        kwargs = auth.botometer.copy()
         kwargs["wait_on_rate_limit"] = True
         self.botometer = Botometer(**kwargs)
 

@@ -2,7 +2,7 @@ import arrow
 import click
 from tweepy import API, Cursor
 
-from twitter_cleanup.authentication import authentication
+from twitter_cleanup.authentication import Authentication
 from twitter_cleanup.cache import Cache
 from twitter_cleanup.user import User
 
@@ -12,7 +12,8 @@ class TwitterCleanup:
     authenticated Twitter account."""
 
     def __init__(self, assume_yes=False):
-        self.api = API(authentication.tweepy, wait_on_rate_limit=True)
+        auth = Authentication.getInstance()
+        self.api = API(auth.tweepy, wait_on_rate_limit=True)
         self.me = self.api.me()
         self.assume_yes = assume_yes
         self._progress_bar_kwargs = {
