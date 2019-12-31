@@ -1,4 +1,4 @@
-# Twitter Clean-up [![GitHub Actions: Black workflow](https://github.com/cuducos/twitter-cleanup/workflows/Black/badge.svg)]()
+# Twitter Clean-up [![GitHub Actions: Black workflow](https://github.com/cuducos/twitter-cleanup/workflows/Black/badge.svg)]() [![GitHub Actions: Tests workflow](https://github.com/cuducos/twitter-cleanup/workflows/Tests/badge.svg)]()
 
 > [🇧🇷 Versão em português do Brasil](docs/README.pt-BR.md)
 
@@ -47,5 +47,9 @@ $ twitter-cleanup bots
 Contributing
 ------------
 
-Please, format your code with [Black](https://github.com/ambv/black>).
-Also, it's a great idea to run the unit tests locally, using [Pytest](http://doc.pytest.org>) or your IDE test runner.
+Please, write and run tests locally, and format your code with [Black](https://github.com/ambv/black>):
+
+```console
+$ python setup.py test
+$ black .
+```

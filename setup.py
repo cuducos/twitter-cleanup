@@ -32,7 +32,7 @@ setup(
     packages=find_packages(),
     py_modules=["twitter_cleanup"],
     setup_requires=["pytest-runner"],
-    tests_require=["pytest"],
+    tests_require=["freezegun", "pytest", "pytest-cov", "pytest-mock"],
     url="https://github.com/cuducos/twitter-cleanup",
     version="0.0.6",
     zip_safe=False,
