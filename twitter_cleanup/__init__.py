@@ -12,7 +12,7 @@ class TwitterCleanup:
     authenticated Twitter account."""
 
     def __init__(self, assume_yes=False):
-        auth = Authentication.getInstance()
+        auth = Authentication.get_instance()
         self.api = API(auth.tweepy, wait_on_rate_limit=True)
         self.me = self.api.me()
         self.assume_yes = assume_yes

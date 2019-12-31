@@ -48,3 +48,4 @@ Contributing
 ------------
 
 Please, format your code with [Black](https://github.com/ambv/black>).
+Also, it's a great idea to run the unit tests locally, using [Pytest](http://doc.pytest.org>) or your IDE test runner.

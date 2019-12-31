@@ -19,7 +19,7 @@ class BotometerResult:
     """Holds Botometer result and avoids repeating the request to their API"""
 
     def __init__(self, user_id=None):
-        auth = Authentication.getInstance()
+        auth = Authentication.get_instance()
         kwargs = auth.botometer.copy()
         kwargs["wait_on_rate_limit"] = True
         self.botometer = Botometer(**kwargs)

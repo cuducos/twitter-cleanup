@@ -10,7 +10,7 @@ class Authentication:
     __instance = None
 
     @staticmethod
-    def getInstance():
+    def get_instance():
         """ Static access method. """
         if Authentication.__instance == None:
             Authentication()
