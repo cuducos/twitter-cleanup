@@ -58,8 +58,8 @@ class TwitterCleanup:
         to_unfollow = []
         cache = Cache("unfollow_inactive_for", kwargs)
 
-        kwargs = self.progress_bar_kwargs("inactivity", total)
-        with click.progressbar(**kwargs) as bar:
+        bar_kwargs = self.progress_bar_kwargs("inactivity", total)
+        with click.progressbar(**bar_kwargs) as bar:
             for user in self.following:
                 should_unfollow = cache.get(user.screen_name)
 
