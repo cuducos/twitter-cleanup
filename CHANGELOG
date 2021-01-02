@@ -1,5 +1,8 @@
 # Changelog
 
+**0.0.7** (January 2, 2021)
+  * Fix bug in authentication class
+
 **0.0.6** (November 22, 2019)
   * Make CLI persistent: it now  retries failed HTTP requests (thanks @g4brielvs)
   * Enhance the CLI output (progress bar and confirmation messages)

@@ -34,6 +34,6 @@ setup(
     setup_requires=["pytest-runner"],
     tests_require=["freezegun", "pytest", "pytest-cov", "pytest-mock"],
     url="https://github.com/cuducos/twitter-cleanup",
-    version="0.0.6",
+    version="0.0.7",
     zip_safe=False,
 )
